@@ -7,26 +7,36 @@ const TETROMINOES = {
     [1, 1],
     [1, 1],
   ],
-  I: [[1, 1, 1, 1]],
+  I: [
+    [1, 1, 1, 1],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+    [0, 0, 0, 0],
+  ],
   S: [
     [0, 1, 1],
     [1, 1, 0],
+    [0, 0, 0],
   ],
   Z: [
     [1, 1, 0],
     [0, 1, 1],
+    [0, 0, 0],
   ],
   L: [
     [1, 1, 1],
     [1, 0, 0],
+    [0, 0, 0],
   ],
   J: [
     [1, 1, 1],
     [0, 0, 1],
+    [0, 0, 0],
   ],
   T: [
     [1, 1, 1],
     [0, 1, 0],
+    [0, 0, 0],
   ],
 };
 
@@ -117,11 +127,32 @@ function onKeyDown(event) {
       tetromino.row++;
       break;
     case 37:
-      tetromino.column--;
+      if (isValid(tetromino.row, tetromino.column - 1)) {
+        tetromino.column--;
+      }
       break;
     case 39:
-      tetromino.column++;
+      if (isValid(tetromino.row, tetromino.column + 1)) {
+        tetromino.column++;
+      }
       break;
   }
   draw();
+}
+
+function isValid(newRow, newColumn) {
+  const matrixSize = tetromino.matrix.length;
+  for (let row = 0; row < matrixSize; row++) {
+    for (let column = 0; column < matrixSize; column++) {
+      if (
+        tetromino.matrix[row][column] &&
+        (newColumn + column < 0 ||
+          newColumn + column >= PLAYFIELD_WIDTH ||
+          newRow + row >= PLAYFIELD_HEIGHT)
+      ) {
+        return false;
+      }
+    }
+  }
+  return true;
 }
